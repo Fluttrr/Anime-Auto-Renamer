@@ -21,53 +21,44 @@ class AnimeFile:
             return self.file_path.name
         except:
             print("Filename could not be found!")
+            return "FILENAME NOT FOUND"
 
     def get_sub_group(self):
-        try:
-            return re.search(
-                "(?<=\[).*?(?=\])", self.get_file_name(), re.IGNORECASE
-            ).group(0)
-        except:
-            return "NOT FOUND"
+        m = re.search(r"(?<=\[).*?(?=\])", self.get_file_name(), re.IGNORECASE)
+        if m:
+            return m.group(0).strip()
+        return "NOT FOUND"
 
     def get_show_name(self):
-        try:
-            file_name = self.get_file_name()
-            if file_name[0] == "[":
-                return (
-                    re.search("(?<=\]).*?(?=[^\w !?'])", file_name, re.IGNORECASE)
-                    .group(0)
-                    .strip()
-                )
-            return (
-                re.search(".*?(?=[^\w !?'])", file_name, re.IGNORECASE).group(0).strip()
-            )
-        except:
-            return "NOT FOUND"
+        file_name = self.get_file_name()
+        if file_name[0] == "[":
+            m = re.search(r"(?<=\]).*?(?=[^\w !?'])", file_name, re.IGNORECASE)
+        else:
+            m = re.search(r".*?(?=[^\w !?'])", file_name, re.IGNORECASE)
+        if m:
+            return m.group(0).strip()
+        return "NOT FOUND"
 
     def get_season_num(self):
-        try:
-            file_name = self.get_file_name()
-            re_result = re.search("(?<=S)\d+", file_name, re.IGNORECASE)
-            # Above regEx searched for a season number with an S before it. If not found, continue with the generic case
-            if not re_result:
-                re_result = re.search("\d+", file_name, re.IGNORECASE)
-            result = int(re_result.group(0))
+        file_name = self.get_file_name()
+        m = re.search(r"(?<=S)\d+", file_name, re.IGNORECASE)
+        # Above regEx searched for a season number with an S before it. If not found, continue with the generic case
+        if not m:
+            m = re.search(r"\d+", file_name, re.IGNORECASE)
+        if m:
+            result = int(m.group(0).strip())
             return str(result)
-        except:
-            return "NOT FOUND"
+        return "NOT FOUND"
 
     def get_file_ext(self):
-        try:
-            return re.search("(?<=\.)\w*$", self.get_file_name(), re.IGNORECASE).group(
-                0
-            )
-        except:
-            return "NOT FOUND"
+        m = re.search(r"(?<=\.)\w*$", self.get_file_name(), re.IGNORECASE)
+        if m:
+            return m.group(0).strip()
+        return "NOT FOUND"
 
     def is_vid_file(self):
         if re.search(
-            "mkv|mp4|avi|mov|flv|wmv|avchd|webm|mpeg4",
+            r"mkv|mp4|avi|mov|flv|wmv|avchd|webm|mpeg4",
             self.get_file_ext(),
             re.IGNORECASE,
         ):
@@ -83,27 +74,27 @@ class AnimeFile:
         file_name = self.get_file_name()
 
         if re.search(
-            "(?<![a-zA-Z])ncop(?![a-zA-Z])|(?<![a-zA-Z])op(?![a-zA-Z])",
+            r"(?<![a-zA-Z])ncop(?![a-zA-Z])|(?<![a-zA-Z])op(?![a-zA-Z])",
             file_name,
             re.IGNORECASE,
         ):
             return "NCOP"
 
         if re.search(
-            "(?<![a-zA-Z])nced(?![a-zA-Z])|(?<![a-zA-Z])ed(?![a-zA-Z])",
+            r"(?<![a-zA-Z])nced(?![a-zA-Z])|(?<![a-zA-Z])ed(?![a-zA-Z])",
             file_name,
             re.IGNORECASE,
         ):
             return "NCED"
 
-        if re.search("(?<![a-zA-Z])ova(?![a-zA-Z])", file_name, re.IGNORECASE):
+        if re.search(r"(?<![a-zA-Z])ova(?![a-zA-Z])", file_name, re.IGNORECASE):
             return "OVA"
 
-        if re.search("(?<![a-zA-Z])ona(?![a-zA-Z])", file_name, re.IGNORECASE):
+        if re.search(r"(?<![a-zA-Z])ona(?![a-zA-Z])", file_name, re.IGNORECASE):
             return "ONA"
 
         if re.search(
-            "(?<![a-zA-Z])special(?![a-zA-Z])|(?<![a-zA-Z])sp(?![a-zA-Z])",
+            r"(?<![a-zA-Z])special(?![a-zA-Z])|(?<![a-zA-Z])sp(?![a-zA-Z])",
             file_name,
             re.IGNORECASE,
         ):
