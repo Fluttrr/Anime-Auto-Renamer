@@ -12,11 +12,14 @@ class AnimeFolder:
         self.files = [AnimeFile(x) for x in self.folderpath.rglob("*.*") if x.is_file()]
 
     def renameAll(self):
+        
+        # Get samples of show info to then be checked by the user
         sampleFile = self.files[0]
         subGroup = sampleFile.getSubGroup()
         showName = sampleFile.getShowName()
         seasonNumber = sampleFile.getSeasonNumber()
 
+        # Loop for user to correct found information
         while True:
             print("Found details of files:")
             print("1: Show Name:", showName)
@@ -36,13 +39,17 @@ class AnimeFolder:
                 case _:
                     break
 
+        # Sort files into their categories to allow for correct numbering within each category
         categories = [[] for x in range(7)]
         for _file in self.files:
             categories[_file.getSpecialIndex()].append(_file)
 
+        # Rename files
         for category in categories:
-            epNum = 1
+            epNum = 1 # Start counting at 1 in each individual category
             for _file in category:
+                
+                # Do not rename non-video files
                 if not _file.isVideoFile():
                     continue
 
@@ -75,7 +82,7 @@ class AnimeFolder:
                     continue
 
             type = _file.getSpecialType()
-            if type != "None":
+            if type != "None": # File is a special file and needs to be sorted into a folder
                 if not (self.folderpath / "Extras").exists():
                     (self.folderpath / "Extras").mkdir()
 
@@ -90,6 +97,7 @@ class AnimeFolder:
                     self.folderpath / "Extras" / type / _file.getFileName()
                 )
 
+        # Deletes all empty folders in the folder
         for _file in self.folderpath.rglob("*"):
             if _file.is_dir() and not any(_file.iterdir()):
                 _file.rmdir()
@@ -99,9 +107,10 @@ class AnimeFolder:
         ans = input(
             'If you wish to skip this folder, type "n". Otherwise, press enter to continue: '
         )
-        if ans == "n":
+        if ans.lower() == "n":
             return
 
+        # Do not sort files if disabled in config
         if config.get("DEFAULT", "SortIntoFolders").lower() == "true":
             self.sortAll()
 

@@ -7,14 +7,17 @@ class GenericFolder:
         self.folderpath = pathlib.Path(folderpath)
         self.animeFolders = list()
 
+    # Finds all folders that contain video files, stopping at the first level which has a video file in it
     def searchForAnimeFolders(self, directory, recursionDepth=0):
         if recursionDepth > 10:
             return
 
+        # Search for files in the current directory
         parentFolder = AnimeFolder(self.folderpath)
         if parentFolder.containsVideoFiles():
             self.animeFolders.append(parentFolder)
 
+        # If none found, continue search for sub-folders
         else:
             for folder in pathlib.Path(directory).glob("*"):
                 tempFolder = AnimeFolder(folder)
