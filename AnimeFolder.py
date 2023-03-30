@@ -12,7 +12,6 @@ class AnimeFolder:
         self.files = [AnimeFile(x) for x in self.folderpath.rglob("*.*") if x.is_file()]
 
     def renameAll(self):
-        
         # Get samples of show info to then be checked by the user
         sampleFile = self.files[0]
         subGroup = sampleFile.getSubGroup()
@@ -48,7 +47,6 @@ class AnimeFolder:
         for category in categories:
             epNum = 1 # Start counting at 1 in each individual category
             for _file in category:
-                
                 # Do not rename non-video files
                 if not _file.isVideoFile():
                     continue
@@ -77,25 +75,28 @@ class AnimeFolder:
     def sortAll(self):
         for _file in self.files:
             # Check whether the user wants to leave non-video files alone and skip the file if so
-            if config.get("DEFAULT", "SortNonVideoIntoOthersFolder").lower() == "false":
-                if not _file.isVideoFile():
-                    continue
+            if (
+                config.get("DEFAULT", "SortNonVideoIntoOthersFolder").lower() == "false"
+                and not _file.isVideoFile()
+            ):
+                continue
 
             type = _file.getSpecialType()
-            if type != "None": # File is a special file and needs to be sorted into a folder
-                if not (self.folderpath / "Extras").exists():
-                    (self.folderpath / "Extras").mkdir()
+            if (
+                type != "None"
+            ):  # File is a special file and needs to be sorted into a folder
+                extrasFolder = self.folderpath / "Extras"
+                typeFolder = extrasFolder / type
 
-                if not (self.folderpath / "Extras" / type).exists():
-                    (self.folderpath / "Extras" / type).mkdir()
+                if not extrasFolder.exists():
+                    extrasFolder.mkdir()
 
-                _file.getFilePath().replace(
-                    self.folderpath / "Extras" / type / _file.getFileName()
-                )
+                if not typeFolder.exists():
+                    typeFolder.mkdir()
 
-                _file.setFilePath(
-                    self.folderpath / "Extras" / type / _file.getFileName()
-                )
+                _file.getFilePath().replace(typeFolder / _file.getFileName())
+
+                _file.setFilePath(typeFolder / _file.getFileName())
 
         # Deletes all empty folders in the folder
         for _file in self.folderpath.rglob("*"):

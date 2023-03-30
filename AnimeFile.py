@@ -50,10 +50,8 @@ class AnimeFile:
             fileName = self.getFileName()
             reResult = re.search("(?<=S)\d+", fileName, re.IGNORECASE)
             # Above regEx searched for a season number with an S before it. If not found, continue with the generic case
-            if reResult == None:
-                reResult = re.search(
-                    "\d+", fileName, re.IGNORECASE
-                )  
+            if not reResult:
+                reResult = re.search("\d+", fileName, re.IGNORECASE)
             result = int(reResult.group(0))
             return str(result)
         except:
@@ -66,45 +64,46 @@ class AnimeFile:
             return "NOT FOUND"
 
     def isVideoFile(self):
-        reResult = re.search(
+        if re.search(
             "mkv|mp4|avi|mov|flv|wmv|avchd|webm|mpeg4",
             self.getFileExtension(),
             re.IGNORECASE,
-        )
-        if reResult != None:
+        ):
             return True
 
-        reResult = re.search(
+        return re.search(
             config.get("DEFAULT", "VideoFileFormats"),
             self.getFileExtension(),
             re.IGNORECASE,
         )
-        return reResult != None
 
     def getSpecialType(self):
         fileName = self.getFileName()
 
-        if (
-            re.search("(?<![a-zA-Z])ncop(?![a-zA-Z])", fileName, re.IGNORECASE) != None
-            or re.search("(?<![a-zA-Z])ed(?![a-zA-Z])", fileName, re.IGNORECASE) != None
+        if re.search(
+            "(?<![a-zA-Z])ncop(?![a-zA-Z])|(?<![a-zA-Z])op(?![a-zA-Z])",
+            fileName,
+            re.IGNORECASE,
         ):
             return "NCOP"
 
-        if (
-            re.search("(?<![a-zA-Z])nced(?![a-zA-Z])", fileName, re.IGNORECASE) != None
-            or re.search("(?<![a-zA-Z])ed(?![a-zA-Z])", fileName, re.IGNORECASE) != None
+        if re.search(
+            "(?<![a-zA-Z])nced(?![a-zA-Z])|(?<![a-zA-Z])ed(?![a-zA-Z])",
+            fileName,
+            re.IGNORECASE,
         ):
             return "NCED"
 
-        if re.search("(?<![a-zA-Z])ova(?![a-zA-Z])", fileName, re.IGNORECASE) != None:
+        if re.search("(?<![a-zA-Z])ova(?![a-zA-Z])", fileName, re.IGNORECASE):
             return "OVA"
 
-        if re.search("(?<![a-zA-Z])ona(?![a-zA-Z])", fileName, re.IGNORECASE) != None:
+        if re.search("(?<![a-zA-Z])ona(?![a-zA-Z])", fileName, re.IGNORECASE):
             return "ONA"
 
-        if (
-            re.search("(?<![a-zA-Z])special(?![a-zA-Z])", fileName, re.IGNORECASE) != None
-            or re.search("(?<![a-zA-Z])sp(?![a-zA-Z])", fileName, re.IGNORECASE) != None
+        if re.search(
+            "(?<![a-zA-Z])special(?![a-zA-Z])|(?<![a-zA-Z])sp(?![a-zA-Z])",
+            fileName,
+            re.IGNORECASE,
         ):
             return "SP"
 
