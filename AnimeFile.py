@@ -85,25 +85,25 @@ class AnimeFile:
         fileName = self.getFileName()
 
         if (
-            re.search("(?<!\w)ncop(?!\w)", fileName, re.IGNORECASE) != None
+            re.search("(?<![a-zA-Z])ncop(?![a-zA-Z])", fileName, re.IGNORECASE) != None
             or re.search("(?<![a-zA-Z])ed(?![a-zA-Z])", fileName, re.IGNORECASE) != None
         ):
             return "NCOP"
 
         if (
-            re.search("(?<!\w)nced(?!\w)", fileName, re.IGNORECASE) != None
+            re.search("(?<![a-zA-Z])nced(?![a-zA-Z])", fileName, re.IGNORECASE) != None
             or re.search("(?<![a-zA-Z])ed(?![a-zA-Z])", fileName, re.IGNORECASE) != None
         ):
             return "NCED"
 
-        if re.search("(?<!\w)ova(?!\w)", fileName, re.IGNORECASE) != None:
+        if re.search("(?<![a-zA-Z])ova(?![a-zA-Z])", fileName, re.IGNORECASE) != None:
             return "OVA"
 
-        if re.search("(?<!\w)ona(?!\w)", fileName, re.IGNORECASE) != None:
+        if re.search("(?<![a-zA-Z])ona(?![a-zA-Z])", fileName, re.IGNORECASE) != None:
             return "ONA"
 
         if (
-            re.search("(?<!\w)special(?!\w)", fileName, re.IGNORECASE) != None
+            re.search("(?<![a-zA-Z])special(?![a-zA-Z])", fileName, re.IGNORECASE) != None
             or re.search("(?<![a-zA-Z])sp(?![a-zA-Z])", fileName, re.IGNORECASE) != None
         ):
             return "SP"
