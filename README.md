@@ -2,27 +2,27 @@
 A utility to quickly rename and organize downloaded anime/shows.
 
 # What exactly does it do?
-It scans any folders you give as an argument for folders that contain video files. 
-  For every found folder it then scans for information you might want to have in a formatted file name, lets you check/edit it and then renames all files.
-  It also organizes the whole folder, moving e.g. OVAs into an "/Extras/OVA" folder. I plan to make this optional later.
-  You can customize the naming patterns in the provided config, as well as some other things.
-  It also works fine for regular shows. It currently does not support preserving individual episode names.
+It scans any folders you give as an argument for folders that contain video files.  
+For every found folder it then scans for information you might want to have in a formatted file name, lets you check/edit it and then renames all files.  
+It also organizes the whole folder, moving e.g. OVAs into an "/Extras/OVA" folder. I plan to make this optional later.  
+You can customize the naming patterns in the provided config, as well as some other things.  
+It also works fine for regular shows. It currently does not support preserving individual episode names.  
 
 # Usage
-**PLEASE READ THE LIST OF BUGS BEFORE USING THIS!**
-Make sure to look through the config.properties file before usage to see if you are happy with the formatting.
-  Also keep in mind any individual episode names will be discarded.
+**PLEASE READ THE LIST OF BUGS BEFORE USING THIS!**  
+Make sure to look through the config.properties file before usage to see if you are happy with the formatting.  
+Also keep in mind any individual episode names will be discarded.  
 
-**Any OS:**
-For this you need python installed (3.11.2 and up).
-  Make sure that you add python to your PATH environment variable when you install it.
-  Download the source code into a folder.
-  Open a terminal window (terminal, cmd, powershell) in the folder and type the following command:
+**Any OS:**  
+* For this you need python installed (3.11.2 and up).
+* Make sure that you add python to your PATH environment variable when you install it.
+* Download the source code into a folder.
+* Open a terminal window (terminal, cmd, powershell) in the folder and type the following command:
 ```
 python Main.py "folder1" "folder2" "folder3"
 ```
 Where folder1 etc. are any directories you want to scan and rename. Keep in mind this recursively looks in subfolders until it finds all folders containing video files.
-  Press enter and it will guide you through the renaming process.
+* Press enter and it will guide you through the renaming process.
 
 # Customization
 File name patterns can be fully customized in the config.properties file, you can use these parameters:

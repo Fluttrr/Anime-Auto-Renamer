@@ -1,6 +1,9 @@
 import pathlib
 from AnimeFile import AnimeFile
+import configparser
 
+config = configparser.RawConfigParser()
+config.read(pathlib.Path.cwd() / "config.properties")
 
 class AnimeFolder:
     def __init__(self, folderpath):
@@ -89,7 +92,9 @@ class AnimeFolder:
         if ans == "n":
             return
 
-        self.sortAll()
+        if config.get("DEFAULT", "SortIntoFolders").lower() == "true":
+            self.sortAll()
+            
         self.renameAll()
 
         print("Folder has been processed.")
