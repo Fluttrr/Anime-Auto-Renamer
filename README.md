@@ -32,12 +32,14 @@ File name patterns can be fully customized in the config.properties file, you ca
 * Show Name
 * Episode Number
 * Season Number
-* Special Type (NCOP, NCED, OVA, ONA, Special, Others, None (for main video files)
+* Special Type (NCOP, NCED, OVA, ONA, Special, Others, None (for main video files))
 
 Other customization options:
 * Episode Zero Padding (E01 instead of E1, scales for larger max episode numbers (E001))
 * Season Zero Padding (S01 instead of S1, does not scale for larger max season numbers)
 * Custom video file formats in case the program does not recognise your files as video files
+* Choose whether to sort files into folders or not
+* Choose whether to sort non-video files or not
 
 # Known Bugs and Feature Plans
 Bugs:

@@ -5,8 +5,8 @@ import configparser
 config = configparser.RawConfigParser()
 config.read(pathlib.Path.cwd() / "config.properties")
 
+
 class AnimeFile:
-    
     def __init__(self, filepath):
         self.filepath = pathlib.Path(filepath)
 
@@ -34,8 +34,14 @@ class AnimeFile:
         try:
             fileName = self.getFileName()
             if fileName[0] == "[":
-                return re.search("(?<=\]).*?(?=[^\w !?'])", fileName, re.IGNORECASE).group(0).strip()
-            return re.search(".*?(?=[^\w !?'])", fileName, re.IGNORECASE).group(0).strip()
+                return (
+                    re.search("(?<=\]).*?(?=[^\w !?'])", fileName, re.IGNORECASE)
+                    .group(0)
+                    .strip()
+                )
+            return (
+                re.search(".*?(?=[^\w !?'])", fileName, re.IGNORECASE).group(0).strip()
+            )
         except:
             return "NOT FOUND"
 
@@ -79,25 +85,40 @@ class AnimeFile:
 
     def getSpecialType(self):
         fileName = self.getFileName()
-        if re.search("(?<!\w)ncop(?!\w)", fileName, re.IGNORECASE) != None or re.search("(?<![a-zA-Z])ed(?![a-zA-Z])", fileName, re.IGNORECASE) != None:
+
+        if (
+            re.search("(?<!\w)ncop(?!\w)", fileName, re.IGNORECASE) != None
+            or re.search("(?<![a-zA-Z])ed(?![a-zA-Z])", fileName, re.IGNORECASE) != None
+        ):
             return "NCOP"
-        if re.search("(?<!\w)nced(?!\w)", fileName, re.IGNORECASE) != None or re.search("(?<![a-zA-Z])ed(?![a-zA-Z])", fileName, re.IGNORECASE) != None:
+
+        if (
+            re.search("(?<!\w)nced(?!\w)", fileName, re.IGNORECASE) != None
+            or re.search("(?<![a-zA-Z])ed(?![a-zA-Z])", fileName, re.IGNORECASE) != None
+        ):
             return "NCED"
+
         if re.search("(?<!\w)ova(?!\w)", fileName, re.IGNORECASE) != None:
             return "OVA"
+
         if re.search("(?<!\w)ona(?!\w)", fileName, re.IGNORECASE) != None:
             return "ONA"
-        if re.search("(?<!\w)special(?!\w)", fileName, re.IGNORECASE) != None or re.search("(?<![a-zA-Z])sp(?![a-zA-Z])", fileName, re.IGNORECASE) != None:
+
+        if (
+            re.search("(?<!\w)special(?!\w)", fileName, re.IGNORECASE) != None
+            or re.search("(?<![a-zA-Z])sp(?![a-zA-Z])", fileName, re.IGNORECASE) != None
+        ):
             return "SP"
-        # If file is a video file but not a known type, it is "Others"
+
         if (
             re.search(
                 "mkv|mp4|avi|mov|flv|wmv|avchd|webm|mpeg4", fileName, re.IGNORECASE
             )
-            == None
+            != None
         ):
-            return "Others"
-        return "None"
+            return "None"
+
+        return "Others"
 
     def getFormattedFileName(
         self,
@@ -131,9 +152,7 @@ class AnimeFile:
                 fileExtension=setFileExtension,
             )
         else:
-            return "".join(
-                config.get("DEFAULT", "SpecialFileNamingScheme")
-            ).format(
+            return "".join(config.get("DEFAULT", "SpecialFileNamingScheme")).format(
                 subGroup=setSubGroup,
                 showName=setShowName,
                 seasonNumber=seasonNum,

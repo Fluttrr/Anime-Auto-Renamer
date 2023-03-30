@@ -5,6 +5,7 @@ import configparser
 config = configparser.RawConfigParser()
 config.read(pathlib.Path.cwd() / "config.properties")
 
+
 class AnimeFolder:
     def __init__(self, folderpath):
         self.folderpath = pathlib.Path(folderpath)
@@ -72,16 +73,19 @@ class AnimeFolder:
             if config.get("DEFAULT", "SortNonVideoIntoOthersFolder").lower() == "false":
                 if not _file.isVideoFile():
                     continue
-                
+
             type = _file.getSpecialType()
             if type != "None":
                 if not (self.folderpath / "Extras").exists():
                     (self.folderpath / "Extras").mkdir()
+
                 if not (self.folderpath / "Extras" / type).exists():
                     (self.folderpath / "Extras" / type).mkdir()
+
                 _file.getFilePath().replace(
                     self.folderpath / "Extras" / type / _file.getFileName()
                 )
+
                 _file.setFilePath(
                     self.folderpath / "Extras" / type / _file.getFileName()
                 )
