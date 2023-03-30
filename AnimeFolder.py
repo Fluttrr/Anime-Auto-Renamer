@@ -1,6 +1,6 @@
 import pathlib
-from AnimeFile import AnimeFile
 import configparser
+from AnimeFile import AnimeFile
 
 config = configparser.RawConfigParser()
 config.read(pathlib.Path.cwd() / "config.properties")
