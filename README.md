@@ -4,7 +4,7 @@ A utility to quickly rename and organize downloaded anime/shows.
 # What exactly does it do?
 It scans any folders you give as an argument for folders that contain video files.  
 For every found folder it then scans for information you might want to have in a formatted file name, lets you check/edit it and then renames all files.  
-It also organizes the whole folder, moving e.g. OVAs into an "/Extras/OVA" folder. I plan to make this optional later.  
+It also optionally organizes the whole folder, moving e.g. OVAs into an "/Extras/OVA" folder.
 You can customize the naming patterns in the provided config, as well as some other things.  
 It also works fine for regular shows. It currently does not support preserving individual episode names.  
 
@@ -21,7 +21,9 @@ Also keep in mind any individual episode names will be discarded.
 ```
 python Main.py "folder1" "folder2" "folder3"
 ```
-Where folder1 etc. are any directories you want to scan and rename. Keep in mind this recursively looks in subfolders until it finds all folders containing video files.
+Where folder1 etc. are any directories you want to scan and rename.  
+Do not forget the double quotes.  
+Keep in mind this recursively looks in subfolders until it finds all folders containing video files.
 * Press enter and it will guide you through the renaming process.
 
 # Customization
@@ -39,16 +41,14 @@ Other customization options:
 
 # Known Bugs and Feature Plans
 Bugs:
-* Video files marked with only ED/OP instead of NCED/NCOP are regarded as normal video files and will be named as such.
-* If there are multiple files in the folder with the same name that are not video files, it will mess them all up and overwrite them.
-* Name recognition could be improved
-* Spaces in folder paths might cause problems in certain environments
+* In rare cases video files with the words "ed", "op" or "sp" (case insensitive, not surrounded by other letters) will cause the program to think they are special files and move/name them as such.
+* Spaces in folder paths might cause problems in certain environments (Works with python 3.11.2 in powershell 7.3.3 for sure)
+* If you enable sorting of non-video files and there are multiple non-video files in the folder with the same name, it will mess them all up and overwrite them.
 
 Feature Plans:
 * Provide alternate file naming option for movies
-* Make file sorting optional
 * Option to undo operations
 * Combine with ability to download anime/shows and place into a directory (full automation)
-* Make actual executables
+* Make executables
 * Include preserving of episode-names if present?
 * GUI?

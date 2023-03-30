@@ -42,31 +42,37 @@ class AnimeFolder:
         for category in categories:
             epNum = 1
             for _file in category:
-                if _file.isVideoFile():
-                    
-                    formattedName = _file.getFormattedFileName(
-                        setEpNum=epNum,
-                        setEpDigits=len(str(len(category))),
-                        setSubGroup=subGroup,
-                        setShowName=showName,
-                        setSeasonNumber=seasonNumber,
-                        setSpecialType=_file.getSpecialType(),
-                        setFileExtension=_file.getFileExtension(),
+                if not _file.isVideoFile():
+                    continue
+
+                formattedName = _file.getFormattedFileName(
+                    setEpNum=epNum,
+                    setEpDigits=len(str(len(category))),
+                    setSubGroup=subGroup,
+                    setShowName=showName,
+                    setSeasonNumber=seasonNumber,
+                    setSpecialType=_file.getSpecialType(),
+                    setFileExtension=_file.getFileExtension(),
+                )
+
+                filePath = _file.getFilePath()
+                try:
+                    filePath.rename(pathlib.Path(filePath.parent) / formattedName)
+                except FileExistsError:
+                    print(
+                        "Could not rename file "
+                        + str(filePath.resolve())
+                        + " as the correctly named file already exists."
                     )
-                    
-                    filePath = _file.getFilePath()
-                    try:
-                        filePath.rename(pathlib.Path(filePath.parent) / formattedName)
-                    except FileExistsError:
-                        print(
-                            "Could not rename file "
-                            + str(filePath.resolve())
-                            + " as the correctly named file already exists."
-                        )
-                    epNum += 1
+                epNum += 1
 
     def sortAll(self):
         for _file in self.files:
+            # Check whether the user wants to leave non-video files alone and skip the file if so
+            if config.get("DEFAULT", "SortNonVideoIntoOthersFolder").lower() == "false":
+                if not _file.isVideoFile():
+                    continue
+                
             type = _file.getSpecialType()
             if type != "None":
                 if not (self.folderpath / "Extras").exists():
@@ -94,7 +100,7 @@ class AnimeFolder:
 
         if config.get("DEFAULT", "SortIntoFolders").lower() == "true":
             self.sortAll()
-            
+
         self.renameAll()
 
         print("Folder has been processed.")
