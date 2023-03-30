@@ -14,7 +14,6 @@ class GenericFolder:
         parentFolder = AnimeFolder(self.folderpath)
         if parentFolder.containsVideoFiles():
             self.animeFolders.append(parentFolder)
-            print("why")
             
         else:
             for folder in pathlib.Path(directory).glob("*"):

@@ -2,12 +2,13 @@ import pathlib
 import re
 import configparser
 
+config = configparser.RawConfigParser()
+config.read(pathlib.Path.cwd() / "config.properties")
 
 class AnimeFile:
+    
     def __init__(self, filepath):
         self.filepath = pathlib.Path(filepath)
-        self.config = configparser.RawConfigParser()
-        self.config.read(pathlib.Path.cwd() / "config.properties")
 
     def getFilePath(self):
         return self.filepath
@@ -67,7 +68,7 @@ class AnimeFile:
             return True
 
         reResult = re.search(
-            self.config.get("DEFAULT", "VideoFileFormats"),
+            config.get("DEFAULT", "VideoFileFormats"),
             self.getFileExtension(),
             re.IGNORECASE,
         )
@@ -112,17 +113,17 @@ class AnimeFile:
             return self.getFileName()
 
         epNum = str(setEpNum)
-        if self.config.get("DEFAULT", "EpisodeZeroPadding").lower() == "true":
+        if config.get("DEFAULT", "EpisodeZeroPadding").lower() == "true":
             while len(epNum) < setEpDigits or len(epNum) < 2:
                 epNum = "0" + epNum
 
         seasonNum = str(setSeasonNumber)
-        if self.config.get("DEFAULT", "SeasonZeroPadding").lower() == "true":
+        if config.get("DEFAULT", "SeasonZeroPadding").lower() == "true":
             while len(seasonNum) < 2:
                 seasonNum = "0" + seasonNum
 
         if self.getSpecialType() == "None":
-            return "".join(self.config.get("DEFAULT", "FileNamingScheme")).format(
+            return "".join(config.get("DEFAULT", "FileNamingScheme")).format(
                 subGroup=setSubGroup,
                 showName=setShowName,
                 seasonNumber=seasonNum,
@@ -131,7 +132,7 @@ class AnimeFile:
             )
         else:
             return "".join(
-                self.config.get("DEFAULT", "SpecialFileNamingScheme")
+                config.get("DEFAULT", "SpecialFileNamingScheme")
             ).format(
                 subGroup=setSubGroup,
                 showName=setShowName,

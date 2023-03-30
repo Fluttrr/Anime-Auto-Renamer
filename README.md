@@ -43,6 +43,7 @@ Bugs:
 * If there are multiple files in the folder with the same name that are not video files, it will mess them all up and overwrite them.
 * Name recognition could be improved
 * Left over empty folders are not deleted
+* Spaces in folder paths might cause problems in certain environments
 
 Feature Plans:
 * Provide alternate file naming option for movies
