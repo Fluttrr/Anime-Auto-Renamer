@@ -8,159 +8,161 @@ config.read(pathlib.Path.cwd() / "config.properties")
 
 class AnimeFile:
     def __init__(self, filepath):
-        self.filepath = pathlib.Path(filepath)
+        self.file_path = pathlib.Path(filepath)
 
-    def getFilePath(self):
-        return self.filepath
+    def get_file_path(self):
+        return self.file_path
 
-    def setFilePath(self, filepath):
-        self.filepath = pathlib.Path(filepath)
+    def set_file_path(self, filepath):
+        self.file_path = pathlib.Path(filepath)
 
-    def getFileName(self):
+    def get_file_name(self):
         try:
-            return self.filepath.name
+            return self.file_path.name
         except:
             print("Filename could not be found!")
 
-    def getSubGroup(self):
+    def get_sub_group(self):
         try:
             return re.search(
-                "(?<=\[).*?(?=\])", self.getFileName(), re.IGNORECASE
+                "(?<=\[).*?(?=\])", self.get_file_name(), re.IGNORECASE
             ).group(0)
         except:
             return "NOT FOUND"
 
-    def getShowName(self):
+    def get_show_name(self):
         try:
-            fileName = self.getFileName()
-            if fileName[0] == "[":
+            file_name = self.get_file_name()
+            if file_name[0] == "[":
                 return (
-                    re.search("(?<=\]).*?(?=[^\w !?'])", fileName, re.IGNORECASE)
+                    re.search("(?<=\]).*?(?=[^\w !?'])", file_name, re.IGNORECASE)
                     .group(0)
                     .strip()
                 )
             return (
-                re.search(".*?(?=[^\w !?'])", fileName, re.IGNORECASE).group(0).strip()
+                re.search(".*?(?=[^\w !?'])", file_name, re.IGNORECASE).group(0).strip()
             )
         except:
             return "NOT FOUND"
 
-    def getSeasonNumber(self):
+    def get_season_num(self):
         try:
-            fileName = self.getFileName()
-            reResult = re.search("(?<=S)\d+", fileName, re.IGNORECASE)
+            file_name = self.get_file_name()
+            re_result = re.search("(?<=S)\d+", file_name, re.IGNORECASE)
             # Above regEx searched for a season number with an S before it. If not found, continue with the generic case
-            if not reResult:
-                reResult = re.search("\d+", fileName, re.IGNORECASE)
-            result = int(reResult.group(0))
+            if not re_result:
+                re_result = re.search("\d+", file_name, re.IGNORECASE)
+            result = int(re_result.group(0))
             return str(result)
         except:
             return "NOT FOUND"
 
-    def getFileExtension(self):
+    def get_file_ext(self):
         try:
-            return re.search("(?<=\.)\w*$", self.getFileName(), re.IGNORECASE).group(0)
+            return re.search("(?<=\.)\w*$", self.get_file_name(), re.IGNORECASE).group(
+                0
+            )
         except:
             return "NOT FOUND"
 
-    def isVideoFile(self):
+    def is_vid_file(self):
         if re.search(
             "mkv|mp4|avi|mov|flv|wmv|avchd|webm|mpeg4",
-            self.getFileExtension(),
+            self.get_file_ext(),
             re.IGNORECASE,
         ):
             return True
 
         return re.search(
             config.get("DEFAULT", "VideoFileFormats"),
-            self.getFileExtension(),
+            self.get_file_ext(),
             re.IGNORECASE,
         )
 
-    def getSpecialType(self):
-        fileName = self.getFileName()
+    def get_special_type(self):
+        file_name = self.get_file_name()
 
         if re.search(
             "(?<![a-zA-Z])ncop(?![a-zA-Z])|(?<![a-zA-Z])op(?![a-zA-Z])",
-            fileName,
+            file_name,
             re.IGNORECASE,
         ):
             return "NCOP"
 
         if re.search(
             "(?<![a-zA-Z])nced(?![a-zA-Z])|(?<![a-zA-Z])ed(?![a-zA-Z])",
-            fileName,
+            file_name,
             re.IGNORECASE,
         ):
             return "NCED"
 
-        if re.search("(?<![a-zA-Z])ova(?![a-zA-Z])", fileName, re.IGNORECASE):
+        if re.search("(?<![a-zA-Z])ova(?![a-zA-Z])", file_name, re.IGNORECASE):
             return "OVA"
 
-        if re.search("(?<![a-zA-Z])ona(?![a-zA-Z])", fileName, re.IGNORECASE):
+        if re.search("(?<![a-zA-Z])ona(?![a-zA-Z])", file_name, re.IGNORECASE):
             return "ONA"
 
         if re.search(
             "(?<![a-zA-Z])special(?![a-zA-Z])|(?<![a-zA-Z])sp(?![a-zA-Z])",
-            fileName,
+            file_name,
             re.IGNORECASE,
         ):
             return "SP"
 
-        if self.isVideoFile():
+        if self.is_vid_file():
             return "None"
 
         return "Others"
 
-    def getFormattedFileName(
+    def get_format_file_name(
         self,
-        setEpNum,
-        setEpDigits,
-        setSubGroup,
-        setShowName,
-        setSeasonNumber,
-        setSpecialType,
-        setFileExtension,
+        set_ep_num,
+        set_ep_digits,
+        set_sub_group,
+        set_show_name,
+        set_season_num,
+        set_special_type,
+        set_file_ext,
     ):
         # Do not rename non-video files
-        if not self.isVideoFile():
-            return self.getFileName()
+        if not self.is_vid_file():
+            return self.get_file_name()
 
         # Adds leading zeros to episode number if enabled
-        epNum = str(setEpNum)
+        ep_num = str(set_ep_num)
         if config.get("DEFAULT", "EpisodeZeroPadding").lower() == "true":
-            while len(epNum) < setEpDigits or len(epNum) < 2:
-                epNum = "0" + epNum
+            while len(ep_num) < set_ep_digits or len(ep_num) < 2:
+                ep_num = "0" + ep_num
 
         # Adds leading zeros to season number if enabled
-        seasonNum = str(setSeasonNumber)
+        season_num = str(set_season_num)
         if config.get("DEFAULT", "SeasonZeroPadding").lower() == "true":
-            while len(seasonNum) < 2:
-                seasonNum = "0" + seasonNum
+            while len(season_num) < 2:
+                season_num = "0" + season_num
 
         # If the file is not a special, use the default naming scheme
-        if self.getSpecialType() == "None":
+        if self.get_special_type() == "None":
             return "".join(config.get("DEFAULT", "FileNamingScheme")).format(
-                subGroup=setSubGroup,
-                showName=setShowName,
-                seasonNumber=seasonNum,
-                episodeNumber=epNum,
-                fileExtension=setFileExtension,
+                subGroup=set_sub_group,
+                showName=set_show_name,
+                seasonNumber=season_num,
+                episodeNumber=ep_num,
+                fileExtension=set_file_ext,
             )
         # If the file is a special, use the special naming scheme
         else:
             return "".join(config.get("DEFAULT", "SpecialFileNamingScheme")).format(
-                subGroup=setSubGroup,
-                showName=setShowName,
-                seasonNumber=seasonNum,
-                specialType=setSpecialType,
-                specialNumber=epNum,
-                fileExtension=setFileExtension,
+                subGroup=set_sub_group,
+                showName=set_show_name,
+                seasonNumber=season_num,
+                specialType=set_special_type,
+                specialNumber=ep_num,
+                fileExtension=set_file_ext,
             )
 
     # This is used to sort the files into their cateogries during the naming process, so that each category can start counting at 0
-    def getSpecialIndex(self):
-        match self.getSpecialType():
+    def get_special_index(self):
+        match self.get_special_type():
             case "None":
                 return 0
             case "NCOP":

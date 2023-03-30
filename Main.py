@@ -9,7 +9,7 @@ def __main__():
             print('Directory "' + arg + '" does not exist and will be skipped.')
             continue
         folder = GenericFolder(arg)
-        folder.renameAllAnimeFolders()
+        folder.rename_all_anime_folders()
 
 
 if __name__ == "__main__":
