@@ -151,6 +151,18 @@ class AnimeFile:
                 fileExtension=set_file_ext,
             )
 
+    def rename(self, name):
+        try:
+            self.file_path.replace(self.file_path.parent / name)
+        except FileExistsError:
+            print(
+                "Could not rename file "
+                + str(self.file_path.resolve())
+                + " as "
+                + str((self.file_path.parent / name).resolve())
+                + " already exists."
+            )
+
     # This is used to sort the files into their cateogries during the naming process, so that each category can start counting at 0
     def get_special_index(self):
         match self.get_special_type():

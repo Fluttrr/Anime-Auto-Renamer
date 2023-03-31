@@ -14,7 +14,43 @@ class AnimeFolder:
         ]
 
     def rename_all(self):
-        # Get samples of show info to then be checked by the user
+        # Get samples of show info that has been checked by the user
+        res = self.ask_infos()
+        show_name = res[0]
+        season_num = res[1]
+        sub_group = res[2]
+
+        # Sort files into their categories to allow for correct numbering within each category
+        categories = [[] for x in range(7)]  # 7 empty arrays in an array
+        for _file in self.files:
+            categories[_file.get_special_index()].append(
+                _file
+            )  # Sort each file into its category using an index (see get_special_index() in AnimeFile.py)
+
+        # Rename files
+        for category in categories:
+            ep_num = 1  # Start counting at 1 in each individual category
+            for _file in category:
+                # Do not rename non-video files
+                if not _file.is_vid_file():
+                    continue
+
+                format_name = _file.get_format_file_name(
+                    set_ep_num=ep_num,
+                    set_ep_digits=len(str(len(category))),
+                    set_sub_group=sub_group,
+                    set_show_name=show_name,
+                    set_season_num=season_num,
+                    set_special_type=_file.get_special_type(),
+                    set_file_ext=_file.get_file_ext(),
+                )
+
+                _file.rename(format_name)
+
+                ep_num += 1
+
+    # Scan for information about the show and ask the user to correct it if needed
+    def ask_infos(self):
         sample_file = self.files[0]
         sub_group = sample_file.get_sub_group()
         show_name = sample_file.get_show_name()
@@ -40,39 +76,7 @@ class AnimeFolder:
                 case _:
                     break
 
-        # Sort files into their categories to allow for correct numbering within each category
-        categories = [[] for x in range(7)]
-        for _file in self.files:
-            categories[_file.get_special_index()].append(_file)
-
-        # Rename files
-        for category in categories:
-            ep_num = 1  # Start counting at 1 in each individual category
-            for _file in category:
-                # Do not rename non-video files
-                if not _file.is_vid_file():
-                    continue
-
-                format_name = _file.get_format_file_name(
-                    set_ep_num=ep_num,
-                    set_ep_digits=len(str(len(category))),
-                    set_sub_group=sub_group,
-                    set_show_name=show_name,
-                    set_season_num=season_num,
-                    set_special_type=_file.get_special_type(),
-                    set_file_ext=_file.get_file_ext(),
-                )
-
-                file_path = _file.get_file_path()
-                try:
-                    file_path.rename(pathlib.Path(file_path.parent) / format_name)
-                except FileExistsError:
-                    print(
-                        "Could not rename file "
-                        + str(file_path.resolve())
-                        + " as the correctly named file already exists."
-                    )
-                ep_num += 1
+        return [show_name, season_num, sub_group]
 
     def sort_all(self):
         for _file in self.files:
