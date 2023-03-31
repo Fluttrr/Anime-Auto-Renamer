@@ -82,7 +82,7 @@ class AnimeFolder:
             print(
                 'If this folder contains a single media file for a movie, type "movie".'
             )
-            ans = input("Type your number here or press enter: ")
+            ans = input("Type your answer here or press enter: ")
             match ans.lower():
                 case "1":
                     show_name = input("Enter the correct show name: ")
@@ -94,6 +94,8 @@ class AnimeFolder:
                     media_type = "Movie"
                 case _:
                     break
+
+            print("")
 
         return {
             "show_name": show_name,
