@@ -16,9 +16,20 @@ class AnimeFolder:
     def rename_all(self):
         # Get samples of show info that has been checked by the user
         res = self.ask_infos()
-        show_name = res[0]
-        season_num = res[1]
-        sub_group = res[2]
+        show_name = res["show_name"]
+        season_num = res["season_num"]
+        sub_group = res["sub_group"]
+        media_type = res["media_type"]
+
+        # Make sure that if movie naming is used, there is only one video file.
+        if media_type == "Movie":
+            vid_count = 0
+            for _file in self.files:
+                if _file.is_vid_file():
+                    vid_count += 1
+            if vid_count > 1:
+                print("More than one video file found, movie naming can not be used.")
+                return
 
         # Sort files into their categories to allow for correct numbering within each category
         categories = [[] for x in range(7)]  # 7 empty arrays in an array
@@ -41,6 +52,7 @@ class AnimeFolder:
                     set_sub_group=sub_group,
                     set_show_name=show_name,
                     set_season_num=season_num,
+                    set_media_type=media_type,
                 )
 
                 _file.rename(format_name)
@@ -53,28 +65,42 @@ class AnimeFolder:
         sub_group = sample_file.get_sub_group()
         show_name = sample_file.get_show_name()
         season_num = sample_file.get_season_num()
+        media_type = "Show"
 
         # Loop for user to correct found information
         while True:
             print("Found details of files:")
+            print("---")
             print("1: Show Name:", show_name)
             print("2: Season Number:", season_num)
-            print("3: Subgroup:", sub_group)
+            print("3: Sub Group:", sub_group)
+            print("Media Type:", media_type)
+            print("---")
             print(
                 "If these are correct, hit enter. If you want to edit any of these, type the number of the one you want to edit."
             )
+            print(
+                'If this folder contains a single media file for a movie, type "movie".'
+            )
             ans = input("Type your number here or press enter: ")
-            match ans:
+            match ans.lower():
                 case "1":
                     show_name = input("Enter the correct show name: ")
                 case "2":
                     season_num = input("Enter the correct season number: ")
                 case "3":
                     sub_group = input("Enter the correct subgroup: ")
+                case "movie":
+                    media_type = "Movie"
                 case _:
                     break
 
-        return [show_name, season_num, sub_group]
+        return {
+            "show_name": show_name,
+            "season_num": season_num,
+            "sub_group": sub_group,
+            "media_type": media_type,
+        }
 
     def sort_all(self):
         for _file in self.files:
