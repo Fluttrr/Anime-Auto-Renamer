@@ -28,5 +28,10 @@ class GenericFolder:
 
     def rename_all_anime_folders(self):
         self.search_anime_folders(self.folder_path)
+        if not any(self.anime_folders):
+            print(
+                "No media folders found within " + str(self.folder_path.resolve()) + "."
+            )
+            return
         for folder in self.anime_folders:
             folder.process_folder()
