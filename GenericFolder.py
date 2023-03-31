@@ -24,8 +24,8 @@ class GenericFolder:
             temp_folder = AnimeFolder(folder)
             if folder.is_dir() and temp_folder.contains_video_files():
                 self.anime_folders.append(temp_folder)
-                return
-            self.search_anime_folders(folder, recursion_depth + 1)
+            else:
+                self.search_anime_folders(folder, recursion_depth + 1)
 
     def rename_all_anime_folders(self):
         self.search_anime_folders(self.folder_path)
