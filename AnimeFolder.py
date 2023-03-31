@@ -41,8 +41,6 @@ class AnimeFolder:
                     set_sub_group=sub_group,
                     set_show_name=show_name,
                     set_season_num=season_num,
-                    set_special_type=_file.get_special_type(),
-                    set_file_ext=_file.get_file_ext(),
                 )
 
                 _file.rename(format_name)

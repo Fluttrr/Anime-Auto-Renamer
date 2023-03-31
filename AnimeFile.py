@@ -112,8 +112,6 @@ class AnimeFile:
         set_sub_group,
         set_show_name,
         set_season_num,
-        set_special_type,
-        set_file_ext,
     ):
         # Do not rename non-video files
         if not self.is_vid_file():
@@ -138,7 +136,7 @@ class AnimeFile:
                 showName=set_show_name,
                 seasonNumber=season_num,
                 episodeNumber=ep_num,
-                fileExtension=set_file_ext,
+                fileExtension=self.get_file_ext(),
             )
         # If the file is a special, use the special naming scheme
         else:
@@ -146,9 +144,9 @@ class AnimeFile:
                 subGroup=set_sub_group,
                 showName=set_show_name,
                 seasonNumber=season_num,
-                specialType=set_special_type,
+                specialType=self.get_special_type(),
                 specialNumber=ep_num,
-                fileExtension=set_file_ext,
+                fileExtension=self.get_file_ext(),
             )
 
     def rename(self, name):
