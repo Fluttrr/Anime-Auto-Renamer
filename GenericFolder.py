@@ -9,22 +9,23 @@ class GenericFolder:
 
     # Finds all folders that contain video files, stopping at the first level which has a video file in it
     def search_anime_folders(self, directory, recursion_depth=0):
-        if recursion_depth > 10:
+        if recursion_depth >= 10:
             return
 
         # Search for files in the current directory
-        parent_folder = AnimeFolder(self.folder_path)
-        if parent_folder.contains_video_files():
-            self.anime_folders.append(parent_folder)
+        if recursion_depth == 0:  # Only need to check on first level
+            parent_folder = AnimeFolder(self.folder_path)
+            if parent_folder.contains_video_files():
+                self.anime_folders.append(parent_folder)
+                return
 
         # If none found, continue search for sub-folders
-        else:
-            for folder in pathlib.Path(directory).glob("*"):
-                temp_folder = AnimeFolder(folder)
-                if folder.is_dir() and temp_folder.contains_video_files():
-                    self.anime_folders.append(temp_folder)
-                else:
-                    self.search_anime_folders(folder, recursion_depth + 1)
+        for folder in pathlib.Path(directory).glob("*"):
+            temp_folder = AnimeFolder(folder)
+            if folder.is_dir() and temp_folder.contains_video_files():
+                self.anime_folders.append(temp_folder)
+                return
+            self.search_anime_folders(folder, recursion_depth + 1)
 
     def rename_all_anime_folders(self):
         self.search_anime_folders(self.folder_path)
