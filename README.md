@@ -48,7 +48,6 @@ Bugs:
 * If you enable sorting of non-video files and there are multiple non-video files in the folder with the same name, it will mess them all up and overwrite them.
 
 Feature Plans:
-* Provide alternate file naming option for movies
 * Option to undo operations
 * Combine with ability to download anime/shows and place into a directory (full automation)
 * Make executables
