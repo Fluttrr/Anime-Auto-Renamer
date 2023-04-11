@@ -32,14 +32,10 @@ class AnimeFolder:
                 return
 
         # Sort files into their categories to allow for correct numbering within each category
-        categories = [[] for x in range(7)]  # 7 empty arrays in an array
-        for _file in self.files:
-            categories[_file.get_special_index()].append(
-                _file
-            )  # Sort each file into its category using an index (see get_special_index() in AnimeFile.py)
+        categories = self.sort_categories()
 
         # Rename files
-        for category in categories:
+        for category in categories.values():
             ep_num = 1  # Start counting at 1 in each individual category
             for _file in category:
                 # Do not rename non-video files
@@ -58,6 +54,24 @@ class AnimeFolder:
                 _file.rename(format_name)
 
                 ep_num += 1
+
+    def sort_categories(self):
+        # Sort files into their categories to allow for correct numbering within each category
+        categories = {
+            "None": [],
+            "NCOP": [],
+            "NCED": [],
+            "OVA": [],
+            "ONA": [],
+            "SP": [],
+            "Others": [],
+        }
+
+        # Sort each file into its category
+        for _file in self.files:
+            categories[_file.get_special_type()].append(_file)
+
+        return categories
 
     # Scan for information about the show and ask the user to correct it if needed
     def ask_infos(self):

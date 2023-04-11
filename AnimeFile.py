@@ -166,21 +166,3 @@ class AnimeFile:
                 + str((self.file_path.parent / name).resolve())
                 + " already exists."
             )
-
-    # This is used to sort the files into their cateogries during the naming process, so that each category can start counting at 0
-    def get_special_index(self):
-        match self.get_special_type():
-            case "None":
-                return 0
-            case "NCOP":
-                return 1
-            case "NCED":
-                return 2
-            case "OVA":
-                return 3
-            case "ONA":
-                return 4
-            case "SP":
-                return 5
-            case "Others":
-                return 6
