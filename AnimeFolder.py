@@ -57,19 +57,14 @@ class AnimeFolder:
 
     def sort_categories(self):
         # Sort files into their categories to allow for correct numbering within each category
-        categories = {
-            "None": [],
-            "NCOP": [],
-            "NCED": [],
-            "OVA": [],
-            "ONA": [],
-            "SP": [],
-            "Others": [],
-        }
+        categories = dict()
 
         # Sort each file into its category
         for _file in self.files:
-            categories[_file.get_special_type()].append(_file)
+            special = _file.get_special_type()
+            if special not in categories.keys():
+                categories[special] = list()
+            categories[special].append(_file)
 
         return categories
 
